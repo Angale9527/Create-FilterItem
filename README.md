@@ -9,6 +9,7 @@
 - 已接入 Create 6.x 开发依赖（Create / Ponder / Flywheel / Registrate）
 - 运行时在 `neoforge.mods.toml` 中要求 `create` 版本范围 `[6.0.0,)`
 - 客户端命令 `/getfilter <item>`：对准 Stock Ticker 时发送 `StockKeeperCategoryRefundPacket`，用命令参数中的过滤器（含组件/NBT）复现退货发包
+- 客户端命令 `/getfilter gui`：打开半透明界面，三选一过滤器类型 + 输入 `[]` 内内容，绕过聊天长度限制后同样发包
 
 ## 安装与配置 (Installation & Configuration)
 
@@ -46,6 +47,14 @@
 
 方括号内可填任意物品组件/NBT（与原版 `/give` 物品参数语法一致）。服务端若按包内栈直接退货，背包会获得命令中指定的那份过滤器。
 
+长 NBT 可用 GUI：
+
+```text
+/getfilter gui
+```
+
+在界面中选择过滤器类型，输入框只填 `[]` 内的内容（可留空，等同 `id[]`），对准 Stock Ticker 后点「确定」。
+
 ## 许可证 (License)
 
 本项目采用 [MIT License](LICENSE)。
@@ -63,7 +72,10 @@
 └── src/main/
     ├── java/com/angale9527/createfilteritem/
     │   ├── CreateFilterItem.java
-    │   └── client/GetFilterCommand.java
+    │   └── client/
+    │       ├── GetFilterCommand.java
+    │       ├── GetFilterRefund.java
+    │       └── GetFilterScreen.java
     ├── resources/assets/createfilteritem/
     └── templates/META-INF/neoforge.mods.toml
 ```

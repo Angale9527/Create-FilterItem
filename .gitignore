@@ -62,3 +62,6 @@ libs/
 *~
 *.tmp
 tmp/
+
+# Local design / plan docs (not part of the mod artifact)
+docs/
