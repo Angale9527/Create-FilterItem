@@ -8,6 +8,7 @@
 - 客户端模组入口 `CreateFilterItem`
 - 已接入 Create 6.x 开发依赖（Create / Ponder / Flywheel / Registrate）
 - 运行时在 `neoforge.mods.toml` 中要求 `create` 版本范围 `[6.0.0,)`
+- 客户端命令 `/getfilter <item>`：对准 Stock Ticker 时发送 `StockKeeperCategoryRefundPacket`，用命令参数中的过滤器（含组件/NBT）复现退货发包
 
 ## 安装与配置 (Installation & Configuration)
 
@@ -26,13 +27,24 @@
 
 ## 使用说明 (Usage)
 
-当前仅为模组骨架 + Create 前置依赖，尚无游戏内玩法内容。
-
 开发客户端：
 
 ```bat
 .\gradlew.bat runClient
 ```
+
+### `/getfilter`（客户端）
+
+1. 准星对准 **Stock Ticker**（库存报机）
+2. 聊天栏执行（无需手持物品）：
+
+```text
+/getfilter create:package_filter[]
+/getfilter create:filter[]
+/getfilter create:attribute_filter[]
+```
+
+方括号内可填任意物品组件/NBT（与原版 `/give` 物品参数语法一致）。服务端若按包内栈直接退货，背包会获得命令中指定的那份过滤器。
 
 ## 许可证 (License)
 
@@ -45,8 +57,13 @@
 ├── gradle.properties
 ├── LICENSE
 ├── README.md
+├── docs/superpowers/
+│   ├── plans/
+│   └── specs/
 └── src/main/
     ├── java/com/angale9527/createfilteritem/
+    │   ├── CreateFilterItem.java
+    │   └── client/GetFilterCommand.java
     ├── resources/assets/createfilteritem/
     └── templates/META-INF/neoforge.mods.toml
 ```

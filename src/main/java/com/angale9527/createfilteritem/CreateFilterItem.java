@@ -11,9 +11,10 @@ import net.neoforged.fml.common.Mod;
 
 @Mod(value = CreateFilterItem.MODID, dist = Dist.CLIENT)
 public class CreateFilterItem {
-    public static final String MODID = "createfilteritem";
-    public static final Logger LOGGER = LogUtils.getLogger();
+	public static final String MODID = "createfilteritem";
+	public static final Logger LOGGER = LogUtils.getLogger();
 
-    public CreateFilterItem(IEventBus modEventBus, ModContainer modContainer) {
-    }
+	public CreateFilterItem(IEventBus modEventBus, ModContainer modContainer) {
+		LOGGER.info("Create-FilterItem loaded (client). Use /getfilter <item> while looking at a Stock Ticker.");
+	}
 }
