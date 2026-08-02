@@ -1,5 +1,5 @@
 ### Gradle ###
-.gradle
+.gradle/
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/**/build/
@@ -11,7 +11,6 @@ build/
 *.ipr
 out/
 !**/src/**/out/
-
 .run/
 
 ### Eclipse ###
@@ -26,15 +25,40 @@ out/
 bin/
 !**/src/**/bin/
 
-### VS Code ###
+### VS Code / Cursor ###
 .vscode/
 
-### Mac OS ###
+### OS ###
 .DS_Store
+Thumbs.db
+Desktop.ini
+ehthumbs.db
 
-### Minecraft Modding ###
+### Logs / Crash dumps ###
+*.log
+logs/
+crash-reports/
+hs_err_pid*
+replay_pid*
+
+### Minecraft Modding (NeoForge ModDevGradle) ###
+# Legacy single run dir and MDG multi-run dirs
 run/
+runs/
 !**/src/**/run/
+!**/src/**/runs/
+
+# Datagen cache (generated resources themselves may be committed)
 **/src/generated/**/.cache/
+
+# Local maven-publish output / optional flat jars
 repo/
 !**/src/**/repo/
+libs/
+!**/src/**/libs/
+
+# Local scratch / backups
+*.bak
+*~
+*.tmp
+tmp/
