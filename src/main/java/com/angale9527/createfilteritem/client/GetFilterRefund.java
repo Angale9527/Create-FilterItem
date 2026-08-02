@@ -1,5 +1,7 @@
 package com.angale9527.createfilteritem.client;
 
+import java.util.Optional;
+
 import com.angale9527.createfilteritem.CreateFilterItem;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -12,6 +14,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.commands.arguments.item.ItemParser;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.TagParser;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
@@ -39,6 +43,23 @@ public final class GetFilterRefund {
 		return itemId + "[" + inside + "]";
 	}
 
+	/** Strip one layer of wrapping single/double quotes from a pasted SNBT blob. */
+	public static String unwrapSnbt(String raw) {
+		if (raw == null) {
+			return "";
+		}
+		String text = raw.trim();
+		if (text.length() >= 2) {
+			char first = text.charAt(0);
+			char last = text.charAt(text.length() - 1);
+			if ((first == '"' && last == '"') || (first == '\'' && last == '\'')) {
+				text = text.substring(1, text.length() - 1)
+					.trim();
+			}
+		}
+		return text;
+	}
+
 	public static ItemStack parseFilterStack(String itemArgument) throws CommandSyntaxException {
 		Minecraft mc = Minecraft.getInstance();
 		if (mc.getConnection() == null) {
@@ -52,6 +73,25 @@ public final class GetFilterRefund {
 			stack.applyComponents(components);
 		}
 		return stack;
+	}
+
+	public static ItemStack parseFilterStackFromSnbt(String snbt) throws CommandSyntaxException {
+		Minecraft mc = Minecraft.getInstance();
+		if (mc.getConnection() == null) {
+			throw new IllegalStateException("No client connection");
+		}
+		String text = unwrapSnbt(snbt);
+		if (text.isEmpty()) {
+			throw new IllegalArgumentException("SNBT 为空");
+		}
+		CompoundTag tag = TagParser.parseTag(text);
+		Optional<ItemStack> parsed = ItemStack.parse(mc.getConnection()
+			.registryAccess(), tag);
+		if (parsed.isEmpty() || parsed.get()
+			.isEmpty()) {
+			throw new IllegalArgumentException("无法从 SNBT 解析出物品");
+		}
+		return parsed.get();
 	}
 
 	public static Outcome trySend(ItemStack filter) {
@@ -86,6 +126,16 @@ public final class GetFilterRefund {
 		} catch (CommandSyntaxException e) {
 			return Outcome.fail(Component.literal("物品参数解析失败: " + e.getMessage()));
 		} catch (IllegalStateException e) {
+			return Outcome.fail(Component.literal(e.getMessage()));
+		}
+	}
+
+	public static Outcome trySendFromSnbt(String snbt) {
+		try {
+			return trySend(parseFilterStackFromSnbt(snbt));
+		} catch (CommandSyntaxException e) {
+			return Outcome.fail(Component.literal("SNBT 解析失败: " + e.getMessage()));
+		} catch (IllegalArgumentException | IllegalStateException e) {
 			return Outcome.fail(Component.literal(e.getMessage()));
 		}
 	}

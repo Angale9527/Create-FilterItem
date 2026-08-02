@@ -9,7 +9,7 @@
 - 已接入 Create 6.x 开发依赖（Create / Ponder / Flywheel / Registrate）
 - 运行时在 `neoforge.mods.toml` 中要求 `create` 版本范围 `[6.0.0,)`
 - 客户端命令 `/getfilter <item>`：对准 Stock Ticker 时发送 `StockKeeperCategoryRefundPacket`，用命令参数中的过滤器（含组件/NBT）复现退货发包
-- 客户端命令 `/getfilter gui`：打开半透明界面，三选一过滤器类型 + 输入 `[]` 内内容，绕过聊天长度限制后同样发包
+- 客户端命令 `/getfilter gui`：打开半透明界面；可在「组件括号」与「完整物品 SNBT」两种输入方式间切换，绕过聊天长度限制后同样发包
 
 ## 安装与配置 (Installation & Configuration)
 
@@ -53,7 +53,16 @@
 /getfilter gui
 ```
 
-在界面中选择过滤器类型，输入框只填 `[]` 内的内容（可留空，等同 `id[]`），对准 Stock Ticker 后点「确定」。
+界面顶部切换输入方式：
+
+1. **组件括号**：选择过滤器类型，输入框只填 `[]` 内内容（可留空，等同 `id[]`）
+2. **SNBT**：粘贴完整物品 SNBT（含 `id` / `count` / `components`），例如：
+
+```text
+{components:{...},count:1,id:"create:filter"}
+```
+
+对准 Stock Ticker 后点「确定」。外层若带一对引号会自动剥掉。
 
 ## 许可证 (License)
 
