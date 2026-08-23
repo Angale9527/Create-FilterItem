@@ -19,7 +19,7 @@ public class GetFilterScreen extends Screen {
 	}
 
 	private enum FilterChoice {
-		LIST("create:filter", "清单过滤器"),
+		LIST("create:filter", "列表过滤器"),
 		ATTRIBUTE("create:attribute_filter", "属性过滤器"),
 		PACKAGE("create:package_filter", "包裹过滤器");
 
