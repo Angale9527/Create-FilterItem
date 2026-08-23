@@ -24,7 +24,8 @@ base {
     archivesName = mod_id
 }
 
-// Forge 1.20.1 ships Java 17 to players; Foojay resolves the toolchain from the root JDK 21.
+// Gradle daemon stays on JDK 21 (root org.gradle.java.home). Compile this subproject with local JDK 17.
+def jdk17Home = file('C:/Program Files/Java/jdk-17')
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 legacyForge {
@@ -102,6 +103,18 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+    if (jdk17Home.directory) {
+        options.fork = true
+        options.forkOptions.javaHome = jdk17Home
+    }
+}
+
+// runClient/runData are the game process (not the Gradle daemon). Pin them to JDK 17 when present.
+def jdk17Java = file("${jdk17Home}/bin/java.exe")
+tasks.withType(JavaExec).configureEach {
+    if (jdk17Java.file) {
+        executable = jdk17Java.absolutePath
+    }
 }
 
 idea {
