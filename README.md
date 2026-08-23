@@ -24,10 +24,18 @@
 
 ## 构建
 
-需要 **JDK 21**。在仓库根目录执行：
+需要 **JDK 21**。Forge 1.20.1 子项目用 Java 17 toolchain 编译；本机若已安装 JDK 17，会优先使用。
+
+在仓库根目录执行：
 
 ```bat
 .\gradlew.bat build
+```
+
+本机 HTTP 代理、Windows JDK 路径等不要写进仓库里的 `gradle.properties`（否则 GitHub Actions 会走 `127.0.0.1` 代理并失败）。请写到用户目录：
+
+```text
+%USERPROFILE%\.gradle\gradle.properties
 ```
 
 构建完成后，在下列目录取 jar：
